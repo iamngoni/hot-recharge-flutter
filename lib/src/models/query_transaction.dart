@@ -2,11 +2,11 @@ import 'dart:convert';
 
 /// query transaction for reconciliation model, get original transaction info sent on the date of the `originalAgentReference`
 class QueryTransaction {
-  final String replyCode;
-  final String replyMsg;
-  final String originalAgentReference;
-  final Map<String, dynamic> rawReply;
-  final String agentReference;
+  final String? replyCode;
+  final String? replyMsg;
+  final String? originalAgentReference;
+  final Map<String, dynamic>? rawReply;
+  final String? agentReference;
 
   QueryTransaction({
     this.replyCode,
@@ -17,14 +17,14 @@ class QueryTransaction {
   });
 
   QueryTransaction copyWith({
-    int replyCode,
-    String replyMsg,
-    String originalAgentReference,
-    Map<String, dynamic> rawReply,
-    String agentReference,
+    int? replyCode,
+    String? replyMsg,
+    String? originalAgentReference,
+    Map<String, dynamic>? rawReply,
+    String? agentReference,
   }) {
     return QueryTransaction(
-      replyCode: replyCode ?? this.replyCode,
+      replyCode: replyCode as String? ?? this.replyCode,
       replyMsg: replyMsg ?? this.replyMsg,
       originalAgentReference:
           originalAgentReference ?? this.originalAgentReference,
@@ -44,8 +44,6 @@ class QueryTransaction {
   }
 
   factory QueryTransaction.fromMap(Map<String, dynamic> map) {
-    if (map == null) return null;
-
     return QueryTransaction(
       replyCode: map['ReplyCode'],
       replyMsg: map['ReplyMsg'],

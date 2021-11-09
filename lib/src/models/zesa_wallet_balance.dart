@@ -2,10 +2,10 @@ import 'dart:convert';
 
 /// get business | user account zesa wallet balance
 class ZesaWalletBalance {
-  final String agentReference;
-  final int replyCode;
-  final String replyMsg;
-  final double walletBalance;
+  final String? agentReference;
+  final int? replyCode;
+  final String? replyMsg;
+  final double? walletBalance;
 
   ZesaWalletBalance({
     this.agentReference,
@@ -15,10 +15,10 @@ class ZesaWalletBalance {
   });
 
   ZesaWalletBalance copyWith({
-    String agentReference,
-    int replyCode,
-    String replyMsg,
-    double walletBalance,
+    String? agentReference,
+    int? replyCode,
+    String? replyMsg,
+    double? walletBalance,
   }) {
     return ZesaWalletBalance(
       agentReference: agentReference ?? this.agentReference,
@@ -38,8 +38,6 @@ class ZesaWalletBalance {
   }
 
   factory ZesaWalletBalance.fromMap(Map<String, dynamic> map) {
-    if (map == null) return null;
-
     return ZesaWalletBalance(
       agentReference: map['AgentReference'],
       replyCode: map['ReplyCode'],

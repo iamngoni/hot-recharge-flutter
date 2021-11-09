@@ -16,3 +16,7 @@ enum RechargeResponse {
   /// api request success but hot-recharge returns a custom exception code
   API_ERROR,
 }
+
+extension UriParser on String {
+  Uri get getUrl => Uri.parse(this);
+}

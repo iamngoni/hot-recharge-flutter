@@ -1,8 +1,9 @@
 import 'dart:async';
 import 'dart:convert';
+
+import 'package:http/http.dart' as http;
 import 'package:logger/logger.dart';
 import 'package:uuid/uuid.dart';
-import 'package:http/http.dart' as http;
 
 import '../../hot_recharge.dart';
 import '../utils.dart';
@@ -28,11 +29,11 @@ class Api {
     printer: PrettyPrinter(),
   );
 
-  final String email;
-  final String pswd;
-  final bool enableLogger;
+  final String? email;
+  final String? pswd;
+  final bool? enableLogger;
 
-  Map<String, String> _headers;
+  late Map<String, String?> _headers;
 
   Api({
     this.email,
@@ -56,7 +57,7 @@ class Api {
   }
 
   void _log(var message, LOG_LEVEL level) {
-    if (enableLogger) {
+    if (enableLogger!) {
       switch (level) {
         case LOG_LEVEL.DEBUG:
           logger.d(message);
@@ -109,8 +110,8 @@ class Api {
       String url = _ROOT_ENDPOINT + _API_VERSION + _WALLET_BALANCE;
 
       http.Response response = await http.get(
-        url,
-        headers: this._headers,
+        url.getUrl,
+        headers: this._headers as Map<String, String>,
       );
 
       var data = jsonDecode(response.body) as Map;
@@ -119,7 +120,7 @@ class Api {
 
       if (data['ReplyCode'] == 2) {
         // success
-        WalletBalance wb = WalletBalance.fromMap(data);
+        WalletBalance wb = WalletBalance.fromMap(data as Map<String, dynamic>);
 
         return ApiResponse(
           message: 'wallet balance success',
@@ -159,8 +160,8 @@ class Api {
       String url = _ROOT_ENDPOINT + _API_VERSION + _ZESA_BALANCE;
 
       http.Response response = await http.get(
-        url,
-        headers: this._headers,
+        url.getUrl,
+        headers: this._headers as Map<String, String>,
       );
 
       var data = jsonDecode(response.body) as Map;
@@ -210,8 +211,8 @@ class Api {
           _ROOT_ENDPOINT + _API_VERSION + _QUERY_TRANSACTION + agentReference;
 
       http.Response response = await http.get(
-        url,
-        headers: this._headers,
+        url.getUrl,
+        headers: this._headers as Map<String, String>,
       );
 
       var data = jsonDecode(response.body) as Map;
@@ -254,8 +255,8 @@ class Api {
   Future<ApiResponse> rechargePinless(
     double amount,
     String contact, {
-    String brandID,
-    String customMessage,
+    String? brandID,
+    String? customMessage,
   }) async {
     _autoUpdateReference();
 
@@ -285,9 +286,9 @@ class Api {
       _headers.remove('Content-type');
 
       http.Response response = await http.post(
-        url,
+        url.getUrl,
         body: payload,
-        headers: this._headers,
+        headers: this._headers as Map<String, String>,
       );
 
       _headers['Content-type'] = _MIME_TYPES;
@@ -351,11 +352,11 @@ class Api {
       _headers.remove('Content-type');
 
       http.Response response = await http.post(
-        url,
+        url.getUrl,
         body: {
           'MeterNumber': meterNumber,
         },
-        headers: this._headers,
+        headers: this._headers as Map<String, String>,
       );
 
       _headers['Content-type'] = _MIME_TYPES;
@@ -401,7 +402,7 @@ class Api {
     double amount,
     String contact,
     String meterNumber, {
-    String customMessage,
+    String? customMessage,
   }) async {
     _autoUpdateReference();
 
@@ -428,9 +429,9 @@ class Api {
       _headers.remove('Content-type');
 
       http.Response response = await http.post(
-        url,
+        url.getUrl,
         body: payload,
-        headers: this._headers,
+        headers: this._headers as Map<String, String>,
       );
 
       _headers['Content-type'] = _MIME_TYPES;
@@ -492,9 +493,9 @@ class Api {
       _headers.remove('Content-type');
 
       http.Response response = await http.post(
-        url,
+        url.getUrl,
         body: {"RechargeId": rechargeId.toString()},
-        headers: this._headers,
+        headers: this._headers as Map<String, String>,
       );
 
       var data = jsonDecode(response.body) as Map;
@@ -505,7 +506,8 @@ class Api {
 
       if (data['ReplyCode'] == 2) {
         // success
-        final QueryZesaTransaction qzt = QueryZesaTransaction.fromMap(data);
+        final QueryZesaTransaction qzt =
+            QueryZesaTransaction.fromMap(data as Map<String, dynamic>);
 
         return ApiResponse(
           message: 'query zesa transaction success',
@@ -551,14 +553,16 @@ class Api {
     try {
       String url =
           _ROOT_ENDPOINT + _API_VERSION + _END_USER_BALANCE + mobileNumber;
-      response = await http.get(url, headers: this._headers);
+      response = await http.get(url.getUrl,
+          headers: this._headers as Map<String, String>);
 
       var data = jsonDecode(response.body) as Map;
 
       _log('End user airtime balance response: $data', LOG_LEVEL.DEBUG);
 
       if (data['ReplyCode'] == 2) {
-        EndUserBalance eub = EndUserBalance.fromMap(data);
+        EndUserBalance eub =
+            EndUserBalance.fromMap(data as Map<String, dynamic>);
 
         return ApiResponse(
           apiResponse: eub,

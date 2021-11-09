@@ -1,21 +1,20 @@
 import 'package:flutter_test/flutter_test.dart';
-
 import 'package:hot_recharge/hot_recharge.dart';
 
 void main() async {
   // create hot-recharge api object
   final api = HotRecharge(
-    accessCode: '',
-    accessPswd: '',
+    accessCode: 'imngonii@gmail.com',
+    accessPswd: 'Nickm@ng13',
     enableLogger: true,
   );
 
   // test variables here
   // TODO: replace with your actual testing variables
-  String meterNumber = '';
-  String topupRefNumber = '';
-  String numberToSentZesaToken = '';
-  String numberToTopup = '';
+  String meterNumber = '14108288052';
+  String topupRefNumber = '0777213388';
+  String numberToSentZesaToken = '0777213388';
+  String numberToTopup = '0777213388';
   int zesaRechargeId = 0000000;
   double zesaAmount = 50;
   double topupAmount = 1.50;
